@@ -79,7 +79,7 @@ const RecipeCard = ({ recipe }) => {
       <Media imageUrl={recipe.imageUrl} />
       <Content>
         <Title
-          href={`https://www.allrecipes.com/recipe/${recipe.recipeId}`}
+          href={recipe.sourceUrl}
           target="_blank"
           rel="noopener noreferrer"
         >

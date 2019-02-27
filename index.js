@@ -53,6 +53,7 @@ app.get('/api/allrecipes/:id', async (req, res) => {
         ingredients: getIngredients(body),
         name: getName(body),
         imageUrl: getImage(body),
+        sourceUrl: URL,
       });
     } else {
       console.log(error);
@@ -112,6 +113,7 @@ app.get('/api/delish/:id', async (req, res) => {
         directions: getDirections(body),
         name: getName(body),
         imageUrl: getImage(body),
+        sourceUrl: URL,
       });
     } else {
       console.log(error);
