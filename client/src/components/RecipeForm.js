@@ -70,7 +70,9 @@ class RecipeForm extends Component {
     const recipeId = this.idInput.current.value;
     const recipeOrigin = this.state.activeButton;
     try {
-      const res = await axios.get('/api/allrecipes/' + recipeId);
+      const res = await axios.get(
+        `/api/${recipeOrigin.toLowerCase()}/${recipeId}`
+      );
       this.props.onNewRecipe({
         ...res.data,
         recipeId,

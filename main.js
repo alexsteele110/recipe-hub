@@ -47,7 +47,7 @@ app.get('/api/allrecipes/:id', async (req, res) => {
   };
 
   request(URL, function(error, response, body) {
-    if (!error) {
+    if (!error && response.statusCode !== 404) {
       res.send({
         directions: getDirections(body),
         ingredients: getIngredients(body),
@@ -61,63 +61,64 @@ app.get('/api/allrecipes/:id', async (req, res) => {
   });
 });
 
-// app.get('/api/delish/:id', async (req, res) => {
-//   const { id } = req.params;
-//   const URL = `https://www.delish.com/cooking/recipe-ideas/${id}`;
+app.get('/api/delish/:id', async (req, res) => {
+  const { id } = req.params;
+  const URL = `https://www.delish.com/cooking/recipe-ideas/${id}`;
 
-//   function getIngredients(html) {
-//     const $ = cheerio.load(html);
-//     const ingredients = [];
-//     const ingredientWithAmount = '';
+  const getDirections = html => {
+    const $ = cheerio.load(html);
+    const directions = [];
 
-//     $('.ingredient-description').each(function(i, elem) {
-//       ingredients[i] = ingredients[i] + ' ' + $(this).text();
-//     });
+    $('.direction-lists')
+      .find('li')
+      .each(function(i, elem) {
+        directions[i] = $(this)
+          .text()
+          .trim();
+      });
 
-//     $('.ingredient-amount').each(function(i, elem) {
-//       console.log($(this).text());
-//       if ($(this).text()) {
-//         ingredients[i] = $(this).text();
-//       }
-//     });
+    return directions;
+  };
 
-//     return ingredients;
-//   }
+  const getIngredients = html => {
+    const $ = cheerio.load(html);
+    const ingredients = [];
 
-// function getIngredients(html) {
-//   const $ = cheerio.load(html);
-//   const ingredients = [];
+    $('.ingredient-item').each(function(i, elem) {
+      ingredients[i] = $(this)
+        .text()
+        .trim();
+    });
 
-//   $('.recipe-ingred_txt.added').each(function(i, elem) {
-//     ingredients[i] = $(this).text().trim();
-//   });
+    return ingredients;
+  };
 
-//   return ingredients.slice(0, -2);
-// };
+  const getName = html => {
+    const $ = cheerio.load(html);
 
-// function getName(html) {
-//   const $ = cheerio.load(html);
+    return $('h1').text();
+  };
 
-//   return $('h1').text();
-// }
+  const getImage = html => {
+    const $ = cheerio.load(html);
 
-// function getImage(html) {
-//   const $ = cheerio.load(html);
+    return $('.zoomable').attr('data-src');
+  };
 
-//   return $('.rec-photo').attr('src');
-// }
-
-//   request(URL, function(error, response, body) {
-//     if (!error) {
-//       res.send({
-//         directions: getIngredients(body),
-//       });
-//     } else {
-//       console.log(error);
-//       res.status(500).send('Something is wrong...');
-//     }
-//   });
-// });
+  request(URL, function(error, response, body) {
+    if (!error && response.statusCode !== 404) {
+      res.send({
+        ingredients: getIngredients(body),
+        directions: getDirections(body),
+        name: getName(body),
+        imageUrl: getImage(body),
+      });
+    } else {
+      console.log(error);
+      res.status(500).send('Something is wrong...');
+    }
+  });
+});
 
 app.listen(5000, () =>
   console.log('Example app listening on http://localhost:5000')

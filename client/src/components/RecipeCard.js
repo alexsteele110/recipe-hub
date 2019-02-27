@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/core';
+import placeholder from '../assets/images/placeholder.png';
 
 const fade = keyframes`
   from {
@@ -23,7 +24,7 @@ const Container = styled.div`
 `;
 
 const Media = styled.div`
-  background-image: url(${props => props.imageUrl});
+  background-image: url(${props => props.imageUrl || placeholder});
   background-size: cover;
   background-position: 50% 50%;
   background-repeat: no-repeat;
