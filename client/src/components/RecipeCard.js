@@ -128,7 +128,7 @@ const RecipeCard = ({ recipe }) => {
           {recipe.name}
         </Title>
         <Subtitle>Source: {recipe.recipeOrigin}</Subtitle>
-        {/* <Directions>
+        <Directions>
           {recipe.directions.map((direction, index) => {
             return (
               <DirectionStep key={index}>
@@ -136,7 +136,7 @@ const RecipeCard = ({ recipe }) => {
               </DirectionStep>
             );
           })}
-        </Directions> */}
+        </Directions>
       </Content>
       <Dropdown items={['one', 'two', 'three']}>
         <AddCircle>
